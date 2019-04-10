@@ -1,0 +1,30 @@
+From cfb482d4fe2c42e201bc6277a130c172f765ec75 Mon Sep 17 00:00:00 2001
+From: Adam Duskett <Aduskett@gmail.com>
+Date: Tue, 5 Feb 2019 11:49:27 -0500
+Subject: [PATCH] use PYTHON_CONFIG to find includes
+
+Find the python includes from a passed PYTHON_CONFIG path.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ m4/python.m4 | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/m4/python.m4 b/m4/python.m4
+index ed5559d..cdaa665 100644
+--- a/m4/python.m4
++++ b/m4/python.m4
+@@ -43,7 +43,10 @@ AC_DEFUN([AM_CHECK_PYTHON_HEADERS],
+ [AC_REQUIRE([AM_PATH_PYTHON])
+ AC_MSG_CHECKING(for headers required to compile python extensions)
+ dnl deduce PYTHON_INCLUDES
+-PYTHON_INCLUDES=`$PYTHON-config --includes`
++if test -z "${PYTHON_CONFIG}" ; then
++   PYTHON_CONFIG=$PYTHON-config
++fi
++PYTHON_INCLUDES=`${PYTHON_CONFIG} --includes`
+ AC_SUBST(PYTHON_INCLUDES)
+ dnl check if the headers exist:
+ save_CPPFLAGS="$CPPFLAGS"
+--
+2.20.1
